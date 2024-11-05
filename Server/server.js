@@ -1,5 +1,6 @@
 "use strict";
 
+let config = require("./config.json");
 
 require('dotenv').config()
 const express = require("express");
@@ -14,6 +15,8 @@ const USER_KEY = process.env.USER_KEY;
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+
+
 
 app.get("/", (req, res) => {
   res.status(200).send("Hello World!");
