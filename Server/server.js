@@ -23,7 +23,7 @@ app.get("/", (req, res) => {
   res.status(200).send("Hello World!");
 });
 
-app.use("/sendNotification", notificationRouter);
+app.use("/notifications", notificationRouter);
 
 app.listen(PORT, HOST);
 console.log(`Running on http://${HOST}:${PORT}`);

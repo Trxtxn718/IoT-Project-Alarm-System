@@ -5,7 +5,7 @@ const API_KEY = process.env.API_KEY;
 const USER_KEY = process.env.USER_KEY;
 let config = require("../config.json");
 
-router.get("/", async (req, res) => {
+router.get("/send", async (req, res) => {
   if (config.isActivated) {
     try {
       let response = await fetch(
