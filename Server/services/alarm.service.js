@@ -3,7 +3,7 @@ const USER_KEY = process.env.USER_KEY;
 
 const alarmModel = require("../schemas/alarmSchema");
 
-export async function sendNotification(message) {
+async function sendNotification(message) {
   let response = await fetch(
     `https://api.pushover.net/1/messages.json?token=${API_KEY}&user=${USER_KEY}&message=${message}`,
     {
@@ -19,3 +19,5 @@ export async function sendNotification(message) {
     message: message,
   });
 }
+
+module.exports = { sendNotification };
