@@ -4,6 +4,8 @@
 
 require('dotenv').config()
 const express = require("express");
+const mongoose = require("mongoose");
+
 
 const app = express();
 
@@ -17,7 +19,7 @@ const PORT = process.env.PORT || 3000;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-
+await mongoose.connect("mongodb://localhost:27017/IoT-Alarm-System");
 
 app.get("/", (req, res) => {
   res.status(200).send("Hello World!");
