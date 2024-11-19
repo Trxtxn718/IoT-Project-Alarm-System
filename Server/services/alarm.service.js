@@ -9,6 +9,9 @@ export async function sendNotification(message) {
       method: "POST",
     }
   );
+  if (response.status != 200) {
+    throw new Error("Failed to send message");
+  }
   console.log(response);
   await alarmModel.create({
     time: new Date().toLocaleString(),
