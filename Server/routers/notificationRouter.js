@@ -5,11 +5,13 @@ const router = express.Router();
 let config = require("../config.json");
 
 const { sendNotification } = require("../services/alarm.service");
+const settingsModel = require("../schemas/settingsSchema");
 
 let alertActive = false;
 
 router.get("/send", async (req, res) => {
-  if (config.isActivated) {
+  const settings = await settingsModel.findOne();
+  if (settings.isActivated) {
     try {
       sendNotification("Test message");
       res.send("Message send succesfully");
@@ -38,7 +40,8 @@ router.get("/status", async (req, res) => {
 });
 
 router.post("/motionDetected", async (req, res) => {
-  if (config.isActivated) {
+  const settings = await settingsModel.findOne();
+  if (settings.isActivated) {
     try {
       let response = await fetch(
         `https://api.pushover.net/1/messages.json?token=${API_KEY}&user=${USER_KEY}&message=Motion detected!`,
