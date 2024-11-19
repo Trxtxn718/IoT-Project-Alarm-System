@@ -3,14 +3,15 @@ const router = express.Router();
 
 
 let config = require("../config.json");
-const alarmModel = require("../schemas/alarmSchema");
+
+const { sendNotification } = require("../services/alarm.service");
 
 let alertActive = false;
 
 router.get("/send", async (req, res) => {
   if (config.isActivated) {
     try {
-    
+      sendNotification("Test message");
       res.send("Message send succesfully");
     } catch (error) {
       console.log("Error:", error);
