@@ -10,6 +10,7 @@ const mongoose = require("mongoose");
 const app = express();
 
 const notificationRouter = require("./routers/notificationRouter");
+const alarmSchema = require('./schemas/alarmSchema');
 
 
 const HOST = process.env.HOST || "127.0.0.1";
@@ -19,7 +20,11 @@ const PORT = process.env.PORT || 3000;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-await mongoose.connect("mongodb://localhost:27017/IoT-Alarm-System");
+mongoose.connect("mongodb://localhost:27017/IoT-Alarm-System").then(() => {
+  console.log("Connected to the database");
+}).catch((error) => {
+  console.log("Error:", error);
+});
 
 app.get("/", (req, res) => {
   res.status(200).send("Hello World!");

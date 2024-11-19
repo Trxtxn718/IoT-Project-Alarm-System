@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require('mongoose');
 const {Schema} = mongoose;
 
 const alarmSchema = new Schema({
@@ -11,3 +11,7 @@ const alarmSchema = new Schema({
         required: true
     }
 });
+
+const alarmModel = mongoose.model("alarms", alarmSchema);
+
+module.exports = alarmModel;
