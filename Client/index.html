@@ -1,11 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard | Alarmsystem</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js"></script>
 </head>
+
 <body>
-    
+    <nav>
+        <h1 id="navbar-h1">Dashboard</h1>
+    </nav>
+    <div class="container">
+        <div class="card" id="alarm-card">
+            <h2>Alarm</h2>
+            <p>Status: <strong id="alarm-status" class="off">Off</strong></p>
+            <button id="alarm-button" onclick="toggleAlarm()">Alarm ein-/ausschalten</button>
+        </div>
+        <div class="card" id="events-card">
+            <h2>Events</h2>
+            <ul id="events-list">
+                <li>
+                    <div>Event 1</div>
+                </li>
+                <li>
+                    <div>Event 2</div>
+                </li>
+                <li>
+                    <div>Event 3</div>
+                </li>
+        </div>
 </body>
+
 </html>
