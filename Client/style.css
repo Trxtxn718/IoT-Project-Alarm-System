@@ -71,9 +71,9 @@ nav h1 {
 }
 
 #events-list {
-    display: flex;
-    flex-wrap: wrap;
+    display: inline-block;
     justify-content: center;
+    align-items: center;
 }
 
 #events-list {
@@ -82,22 +82,20 @@ nav h1 {
 }
 
 #events-list li {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    align-items: center;
+
     list-style-type: none;
     margin: 1em;
     padding: 1em;
     background-color: white;
     border-radius: 5px;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-    width: 300px;
+    width: 70vw;
 }
 
-#events-list li:hover {
-    list-style-type: none;
-    margin: 1em;
-    padding: 1em;
-    background-color: rgb(207, 207, 207);
-    border-radius: 5px;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-    width: 300px;
-    cursor: pointer;
+#events-list li h3 {
+    margin: 0;
 }

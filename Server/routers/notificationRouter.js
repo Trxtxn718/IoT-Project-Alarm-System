@@ -64,5 +64,4 @@ router.get("/motionDetected", async (req, res) => {
   }
 });
 
-
 module.exports = router;
