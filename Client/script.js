@@ -3,7 +3,13 @@ async function toggleAlarm() {
     let alarmStatus
     alarmStatus = await fetch("http://127.0.0.1:3000" + "/notifications/status")
     alarmStatus = await alarmStatus.text()
-    console.log("Alarm status:", alarmStatus)
+    if (alarmStatus === "deactivated") {
+      await fetch("http://127.0.0.1:3000" + "/notifications/activate")
+      alarmStatus = "activated"
+    } else {
+      await fetch("http://127.0.0.1:3000" + "/notifications/deactivate")
+      alarmStatus = "deactivated"
+    }
     updateElement(alarmStatus)
   } catch (error) {
     console.error("Error:", error)
@@ -14,7 +20,6 @@ async function toggleAlarm() {
 function updateElement(alarmStatus) {
   let statusElement = document.getElementById("alarm-status")
 
-  console.log("Alarm status CAHNGER:", alarmStatus)
   if (alarmStatus === "UNREACHABLE") {
     statusElement.classList.add("off")
     statusElement.innerText = "NOT REACHABLE"
@@ -38,5 +43,6 @@ document.addEventListener("DOMContentLoaded", function () {
   }
   catch (error) {
     console.error("Error:", error)
+    updateElement("UNREACHABLE")
   }
 });

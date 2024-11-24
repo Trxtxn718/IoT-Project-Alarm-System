@@ -81,7 +81,6 @@ localhost.get("/script.js", (req, res) => {
 });
 
 localhost.get("/favicon.ico", (req, res) => {
-  console.log("Favicon requested");
   sendFavicon(req, res);
 });
 
