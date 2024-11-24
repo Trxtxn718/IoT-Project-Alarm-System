@@ -1,20 +1,19 @@
 const express = require("express");
 const router = express.Router();
 
-const API_KEY = process.env.API_KEY;
-const USER_KEY = process.env.USER_KEY;
+
 let config = require("../config.json");
 
+const { sendNotification, repeatMessage } = require("../services/alarm.service");
+const settingsModel = require("../schemas/settingsSchema");
+
+let alertActive = false;
+
 router.get("/send", async (req, res) => {
-  if (config.isActivated) {
+  const settings = await settingsModel.findOne();
+  if (settings.isActivated) {
     try {
-      let response = await fetch(
-        `https://api.pushover.net/1/messages.json?token=${API_KEY}&user=${USER_KEY}&message=Hello world from server again!`,
-        {
-          method: "POST",
-        }
-      );
-      console.log(response);
+      sendNotification("Test message");
       res.send("Message send succesfully");
     } catch (error) {
       console.log("Error:", error);
@@ -27,12 +26,36 @@ router.get("/send", async (req, res) => {
 
 router.get("/activate", async (req, res) => {
   config.isActivated = true;
+  console.log("Notification is activated");
   res.send("Notification is activated");
 });
 
 router.get("/deactivate", async (req, res) => {
   config.isActivated = false;
+  console.log("Notification is deactivated");
   res.send("Notification is deactivated");
+});
+
+router.get("/status", async (req, res) => {
+  console.log("Heartbeat received from", req.ip , "at", new Date().toLocaleString());
+  res.send(config.isActivated ? "activated" : "deactivated");
+});
+
+router.post("/motionDetected", async (req, res) => {
+  const settings = await settingsModel.findOne();
+  if (settings.isActivated) {
+    try {
+      sendNotification("Motion detected!");
+      repeatMessage("Motion detected!");
+      alertActive = true;
+      res.send("Message sent succesfully");
+    } catch (error) {
+      console.log("Error:", error);
+      res.send("Error").status(400);
+    }
+  } else {
+    res.send("Notification is not activated").status(200);
+  }
 });
 
 
