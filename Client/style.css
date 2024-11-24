@@ -53,8 +53,7 @@ nav h1 {
     padding: 1em;
 }
 
-#alarm-button:hover,
-#alarm-button:focus {
+#alarm-button:hover {
     background-color: #555;
 }
 
@@ -92,8 +91,7 @@ nav h1 {
     width: 300px;
 }
 
-#events-list li:hover,
-#events-list li:focus {
+#events-list li:hover {
     list-style-type: none;
     margin: 1em;
     padding: 1em;
