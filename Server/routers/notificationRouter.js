@@ -6,6 +6,7 @@ let config = require("../config.json");
 
 const { sendNotification, repeatMessage } = require("../services/alarm.service");
 const settingsModel = require("../schemas/settingsSchema");
+const alarmModel = require("../schemas/alarmSchema");
 
 let alertActive = false;
 
@@ -37,17 +38,22 @@ router.get("/deactivate", async (req, res) => {
 });
 
 router.get("/status", async (req, res) => {
-  console.log("Heartbeat received from", req.ip , "at", new Date().toLocaleString());
+  console.log("Heartbeat received from", req.ip, "at", new Date().toLocaleString());
   res.send(config.isActivated ? "activated" : "deactivated");
 });
 
-router.post("/motionDetected", async (req, res) => {
+router.get("/motionDetected", async (req, res) => {
   const settings = await settingsModel.findOne();
-  if (settings.isActivated) {
+  if (config.isActivated) {
     try {
       sendNotification("Motion detected!");
       repeatMessage("Motion detected!");
       alertActive = true;
+      const newAlarm = new alarmModel({
+        message: "Motion detected!",
+        time: new Date().toLocaleString(),
+      });
+      newAlarm.save();
       res.send("Message sent succesfully");
     } catch (error) {
       console.log("Error:", error);
@@ -58,5 +64,21 @@ router.post("/motionDetected", async (req, res) => {
   }
 });
 
+router.get("/events", async (req, res) => {
+  const oneMonthAgo = new Date();
+  oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+
+  console.log("One month ago:", oneMonthAgo.toLocaleString());
+
+  try {
+    const alarms = await alarmModel.find({
+      time: { $gte: oneMonthAgo.toLocaleString() }
+    });
+    res.json(alarms);
+  } catch (error) {
+    console.log("Error:", error);
+    res.send("Error").status(400);
+  }
+});
 
 module.exports = router;
