@@ -4,7 +4,7 @@ const router = express.Router();
 
 let config = require("../config.json");
 
-const { sendNotification } = require("../services/alarm.service");
+const { sendNotification, repeatMessage } = require("../services/alarm.service");
 const settingsModel = require("../schemas/settingsSchema");
 
 let alertActive = false;
@@ -35,25 +35,17 @@ router.get("/deactivate", async (req, res) => {
 });
 
 router.get("/status", async (req, res) => {
-  console.log("Heartbeat received from", req.ip);
-  res.send(`Notification is ${config.isActivated ? "activated" : "deactivated"}`);
+  console.log("Heartbeat received from", req.ip , "at", new Date().toLocaleString());
+  res.send(config.isActivated ? "activated" : "deactivated");
 });
 
 router.post("/motionDetected", async (req, res) => {
   const settings = await settingsModel.findOne();
   if (settings.isActivated) {
     try {
-      let response = await fetch(
-        `https://api.pushover.net/1/messages.json?token=${API_KEY}&user=${USER_KEY}&message=Motion detected!`,
-        {
-          method: "POST",
-        }
-      );
-      if (response.status != 200) {
-        throw new Error("Failed to send message");
-      }
+      sendNotification("Motion detected!");
+      repeatMessage("Motion detected!");
       alertActive = true;
-      console.log(response);
       res.send("Message sent succesfully");
     } catch (error) {
       console.log("Error:", error);

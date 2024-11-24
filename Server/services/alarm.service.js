@@ -20,4 +20,16 @@ async function sendNotification(message) {
   });
 }
 
-module.exports = { sendNotification };
+async function repeatMessage(message) {
+  while (true) {
+    await new Promise((resolve) => setTimeout(resolve, 1000 * 60 * 5)); // 5 minutes
+    if (alertActive) {
+      sendNotification(message);
+    }
+    else {
+      break;
+    }
+  }
+}
+
+module.exports = { sendNotification, repeatMessage };
