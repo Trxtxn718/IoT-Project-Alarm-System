@@ -38,7 +38,7 @@ router.get("/deactivate", async (req, res) => {
 });
 
 router.get("/status", async (req, res) => {
-  console.log("Heartbeat received from", req.ip , "at", new Date().toLocaleString());
+  console.log("Heartbeat received from", req.ip, "at", new Date().toLocaleString());
   res.send(config.isActivated ? "activated" : "deactivated");
 });
 
@@ -61,6 +61,23 @@ router.get("/motionDetected", async (req, res) => {
     }
   } else {
     res.send("Notification is not activated").status(200);
+  }
+});
+
+router.get("/events", async (req, res) => {
+  const oneMonthAgo = new Date();
+  oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+
+  console.log("One month ago:", oneMonthAgo.toLocaleString());
+
+  try {
+    const alarms = await alarmModel.find({
+      time: { $gte: oneMonthAgo.toLocaleString() }
+    });
+    res.json(alarms);
+  } catch (error) {
+    console.log("Error:", error);
+    res.send("Error").status(400);
   }
 });
 

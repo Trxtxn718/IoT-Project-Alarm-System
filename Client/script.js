@@ -33,13 +33,13 @@ function updateElement(alarmStatus) {
   }
 }
 
-function addEventToList(eventType, eventDate) {
+function addEventToList(eventType, eventTime) {
   const li = document.createElement("li")
   const h3 = document.createElement("h3")
   const div = document.createElement("div")
 
   h3.innerText = eventType
-  div.innerText = eventDate
+  div.innerText = eventTime
 
   li.appendChild(h3)
   li.appendChild(div)
@@ -60,12 +60,16 @@ document.addEventListener("DOMContentLoaded", function () {
     updateElement("UNREACHABLE")
   }
 
-  // try {
-  //   fetch("http://127.0.0.1:3000" + "/notifications/events")
-  //   .then(response => response.json())
-  //   .then(events => {
-  //     events.forEach(event => {
-  //       addEventToList("Alarm", event.date)
-  //     })
-  //   }
+  try {
+    fetch("http://127.0.0.1:3000" + "/notifications/events")
+      .then(response => response.json())
+      .then(events => {
+        events.forEach(event => {
+          addEventToList("Alarm", event.time)
+        })
+      })
+  }
+  catch (error) {
+    console.error("Error:", error)
+  }
 });
