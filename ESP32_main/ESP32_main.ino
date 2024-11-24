@@ -21,6 +21,7 @@
 int cycle = 0;
 int motion = 0;
 int activated = 0;
+int alert = 0;
 
 void setup() {
   delay(500);
@@ -64,6 +65,9 @@ void loop() {
   String answer = httpGETRequest(SERVER_STATUS_ROUTE);
   Serial.println(answer);
   activated = answer.equals("activated");
+  if (!activated) {
+    alert = 0;
+  }
 
   delay(1000);
 }
@@ -104,5 +108,16 @@ void motionDetected() {
     Serial.println("Motion Detected");
     answer = httpGETRequest(SERVER_MOTION_DETECTED);
     delay(100)
-  } while (!answer.equals("Message sent succesfully"))
+  } while (!answer.equals("Message sent succesfully") && !answer.equals("Notification is not activated"))
+
+    if (answer.equals("Message sent succesfully")) {
+    alert = 1
+  }
+
+  while (alert) {
+    analogWrite(BUZZER_PIN, BUZZER_VALUE);
+    delay(500);
+    analogWrite(BUZZER_PIN, 0);
+    delay(500);
+  }
 }
