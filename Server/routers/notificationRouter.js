@@ -6,6 +6,7 @@ let config = require("../config.json");
 
 const { sendNotification, repeatMessage } = require("../services/alarm.service");
 const settingsModel = require("../schemas/settingsSchema");
+const alarmModel = require("../schemas/alarmSchema");
 
 let alertActive = false;
 
@@ -39,13 +40,18 @@ router.get("/status", async (req, res) => {
   res.send(config.isActivated ? "activated" : "deactivated");
 });
 
-router.post("/motionDetected", async (req, res) => {
+router.get("/motionDetected", async (req, res) => {
   const settings = await settingsModel.findOne();
-  if (settings.isActivated) {
+  if (config.isActivated) {
     try {
       sendNotification("Motion detected!");
       repeatMessage("Motion detected!");
       alertActive = true;
+      const newAlarm = new alarmModel({
+        message: "Motion detected!",
+        time: new Date().toLocaleString(),
+      });
+      newAlarm.save();
       res.send("Message sent succesfully");
     } catch (error) {
       console.log("Error:", error);
