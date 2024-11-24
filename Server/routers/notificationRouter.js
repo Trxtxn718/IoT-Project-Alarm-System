@@ -27,11 +27,13 @@ router.get("/send", async (req, res) => {
 
 router.get("/activate", async (req, res) => {
   config.isActivated = true;
+  console.log("Notification is activated");
   res.send("Notification is activated");
 });
 
 router.get("/deactivate", async (req, res) => {
   config.isActivated = false;
+  console.log("Notification is deactivated");
   res.send("Notification is deactivated");
 });
 
