@@ -12,25 +12,18 @@
 // #define WIFI_PASS "12345678"
 #define CONNECTION_TIMEOUT 10
 
-#define SERVER_NAME "http://192.168.137.1:3000"
+#define SERVER_STATUS_ROUTE "http://192.168.137.1:3000/notifications/status"
+#define SERVER_MOTION_DETECTED "http://192.168.137.1:3000/notifications/motionDetected"
 
 #include <WiFi.h>
 #include <HTTPClient.h>
 
 int cycle = 0;
 int motion = 0;
+int activated = 0;
 
 void setup() {
-  pinMode(BUZZER_PIN, OUTPUT);
-
-  delay(1000);
-
-  analogWrite(BUZZER_PIN, BUZZER_VALUE);
-
   delay(500);
-
-  analogWrite(BUZZER_PIN, 0);
-
 
   int timeout_counter = 0;
 
@@ -68,8 +61,9 @@ void loop() {
   //   int httpResponseCode = http.POST("{\"api_key\":\"tPmAT5Ab3j7F9\",\"sensor\":\"BME280\",\"value1\":\"24.25\",\"value2\":\"49.54\",\"value3\":\"1005.14\"}");
   // }
 
-  String answer = httpGETRequest(SERVER_NAME);
+  String answer = httpGETRequest(SERVER_STATUS_ROUTE);
   Serial.println(answer);
+  activated = answer.equals("activated");
 
   delay(1000);
 }
@@ -77,7 +71,7 @@ void loop() {
 String httpGETRequest(const char* serverName) {
   HTTPClient http;
 
-  // Your IP address with path or Domain name with URL path 
+  // Your IP address with path or Domain name with URL path
   http.begin(serverName);
 
   // If you need Node-RED/server authentication, insert user and password below
@@ -87,14 +81,13 @@ String httpGETRequest(const char* serverName) {
   // Send HTTP POST request
   int httpResponseCode = http.GET();
 
-  String payload = "{}"; 
+  String payload = "{}";
 
-  if (httpResponseCode>0) {
+  if (httpResponseCode > 0) {
     Serial.print("HTTP Response code: ");
     Serial.println(httpResponseCode);
     payload = http.getString();
-  }
-  else {
+  } else {
     Serial.print("Error code: ");
     Serial.println(httpResponseCode);
   }
@@ -105,5 +98,11 @@ String httpGETRequest(const char* serverName) {
 }
 
 void motionDetected() {
-  Serial.println("Motion Detected");
+  String answer = "";
+
+  do {
+    Serial.println("Motion Detected");
+    answer = httpGETRequest(SERVER_MOTION_DETECTED);
+    delay(100)
+  } while (!answer.equals("Message sent succesfully"))
 }
