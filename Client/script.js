@@ -1,13 +1,13 @@
 async function toggleAlarm() {
   try {
     let alarmStatus
-    alarmStatus = await fetch("http://127.0.0.1:3000" + "/notifications/status")
+    alarmStatus = await fetch(window.location + "notifications/status")
     alarmStatus = await alarmStatus.text()
     if (alarmStatus === "deactivated") {
-      await fetch("http://127.0.0.1:3000" + "/notifications/activate")
+      await fetch(window.location + "notifications/activate")
       alarmStatus = "activated"
     } else {
-      await fetch("http://127.0.0.1:3000" + "/notifications/deactivate")
+      await fetch(window.location + "notifications/deactivate")
       alarmStatus = "deactivated"
     }
     updateElement(alarmStatus)
@@ -49,7 +49,7 @@ function addEventToList(eventType, eventTime) {
 
 document.addEventListener("DOMContentLoaded", function () {
   try {
-    fetch("http://127.0.0.1:3000" + "/notifications/status")
+    fetch(window.location + "notifications/status")
       .then(response => response.text())
       .then(alarmStatus => {
         updateElement(alarmStatus)
@@ -61,7 +61,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   try {
-    fetch("http://127.0.0.1:3000" + "/notifications/events")
+    fetch(window.location + "notifications/events")
       .then(response => response.json())
       .then(events => {
         events.forEach(event => {
