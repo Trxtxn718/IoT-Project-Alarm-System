@@ -22,13 +22,13 @@ function updateElement(alarmStatus) {
 
   if (alarmStatus === "UNREACHABLE") {
     statusElement.classList.add("off")
-    statusElement.innerText = "NOT REACHABLE"
+    statusElement.innerText = "NICHT ERREICHBAR"
   }
   else if (alarmStatus === "deactivated") {
-    statusElement.innerText = "Off"
+    statusElement.innerText = "AUS"
     statusElement.classList.add("off")
   } else {
-    statusElement.innerText = "On"
+    statusElement.innerText = "AN"
     statusElement.classList.remove("off")
   }
 }
