@@ -42,6 +42,11 @@ router.get("/status", async (req, res) => {
   res.send(config.isActivated ? "activated" : "deactivated");
 });
 
+router.get("/statusServer", async (req, res) => {
+  console.log("Client", req.ip, "requested dashboard data at", new Date().toLocaleString());
+  res.send(config.isActivated ? "activated" : "deactivated");
+});
+
 router.get("/motionDetected", async (req, res) => {
   const settings = await settingsModel.findOne();
   if (config.isActivated) {
@@ -67,8 +72,6 @@ router.get("/motionDetected", async (req, res) => {
 router.get("/events", async (req, res) => {
   const oneMonthAgo = new Date();
   oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
-
-  console.log("One month ago:", oneMonthAgo.toLocaleString());
 
   try {
     const alarms = await alarmModel.find({

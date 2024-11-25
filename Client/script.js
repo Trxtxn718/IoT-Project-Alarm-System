@@ -1,7 +1,7 @@
 async function toggleAlarm() {
   try {
     let alarmStatus
-    alarmStatus = await fetch(window.location + "notifications/status")
+    alarmStatus = await fetch(window.location + "notifications/statusServer")
     alarmStatus = await alarmStatus.text()
     if (alarmStatus === "deactivated") {
       await fetch(window.location + "notifications/activate")
@@ -49,7 +49,7 @@ function addEventToList(eventType, eventTime) {
 
 document.addEventListener("DOMContentLoaded", function () {
   try {
-    fetch(window.location + "notifications/status")
+    fetch(window.location + "notifications/statusServer")
       .then(response => response.text())
       .then(alarmStatus => {
         updateElement(alarmStatus)
